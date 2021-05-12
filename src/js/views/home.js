@@ -14,15 +14,21 @@ export const Home = () => {
 				{store.characters.map((item, index) => {
 					return (
 						<div key={index}>
-							<Character name={item.name} uid={item.uid} />;
+							<Character name={item.name} uid={item.uid} />
 						</div>
 					);
 				})}
 			</div>
 			<br />
 			<h2>Planets</h2>
-			<div className="d-flex justify-content-between border">
-				<Planet name="Luke" gender="male" hairColor="blond" eyeColor="blue" />
+			<div className="scrolling-wrapper row flex-row flex-nowrap  ">
+				{store.planets.map((item, index) => {
+					return (
+						<div key={index}>
+							<Planet name={item.name} uid={item.uid} />
+						</div>
+					);
+				})}
 			</div>
 		</div>
 	);

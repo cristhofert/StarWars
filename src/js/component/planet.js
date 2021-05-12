@@ -1,20 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
+import { Context } from "../store/appContext";
 
 const Planet = props => {
+	const { store, actions } = useContext(Context);
 	return (
 		<div className="card" style={{ width: "18rem" }}>
-			<img className="card-img-top" src="https://picsum.photos/400/200" alt="Card image cap" />
+			<img className="card-img-top" src="https://picsum.photos/id/1010/400/200" alt="Card image cap" />
 			<div className="card-body">
 				<h5 className="card-title">{props.name}</h5>
-				<p className="card-text">
-					Population: {props.population}
-					<br />
-					Terrain: {props.terrain}
-				</p>
+				<p className="card-text">Lorem Ipsum</p>
 				<div className="d-flex justify-content-between">
-					<button className="btn btn-primary">Learn More!</button>
-					<button className="btn btn-warning">
+					<Link className="btn btn-primary" to={"/planet/" + props.uid}>
+						Learn More!
+					</Link>
+					<button className="btn btn-warning" onClick={() => actions.addFav(props.name, props.uid, "planet")}>
 						<i className="fas fa-heart" />
 					</button>
 				</div>
@@ -25,8 +26,7 @@ const Planet = props => {
 
 Planet.propTypes = {
 	name: PropTypes.string,
-	population: PropTypes.string,
-	terrain: PropTypes.string
+	uid: PropTypes.string
 };
 
 export default Planet;

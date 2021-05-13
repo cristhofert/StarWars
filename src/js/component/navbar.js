@@ -12,21 +12,22 @@ export const Navbar = () => {
 					<img src={starsWar} alt="star-wars" className="navbar-brand mb-0 h1" style={{ height: "2em" }} />
 				</Link>
 				<div className="collapse navbar-collapse"></div>
-				<div className="collapse navbar-collapse">
-					<ul className="navbar-nav mr-auto">
-						<li className="nav-item dropdown">
-							<a
-								className="nav-link dropdown-toggle btn btn-outline-primary"
-								href="#"
-								id="navbarDropdown"
-								role="button"
-								data-toggle="dropdown"
-								aria-haspopup="true"
-								aria-expanded="false">
-								Favorites
-							</a>
-							<div className="dropdown-menu" aria-labelledby="navbarDropdown">
-								{store.favorites.map((item, index) => {
+
+				<ul className="navbar-nav mr-auto">
+					<li className="nav-item dropdown">
+						<a
+							className="nav-link dropdown-toggle btn btn-outline-primary"
+							href="#"
+							id="navbarDropdown"
+							role="button"
+							data-toggle="dropdown"
+							aria-haspopup="true"
+							aria-expanded="false">
+							Favorites <span className="badge badge-secondary">{store.favorites.length}</span>
+						</a>
+						<div className="dropdown-menu" aria-labelledby="navbarDropdown">
+							{store.favorites.length > 0 ? (
+								store.favorites.map((item, index) => {
 									return (
 										<div key={index} className="dropdown-item d-flex justify-content-between">
 											<Link to={item.type + "/" + item.uid} className="pr-1">
@@ -41,11 +42,13 @@ export const Navbar = () => {
 											</button>
 										</div>
 									);
-								})}
-							</div>
-						</li>
-					</ul>
-				</div>
+								})
+							) : (
+								<p className="dropdown-item">nothing yet</p>
+							)}
+						</div>
+					</li>
+				</ul>
 			</div>
 		</nav>
 	);

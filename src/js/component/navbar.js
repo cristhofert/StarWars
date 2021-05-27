@@ -35,13 +35,13 @@ export const Navbar = () => {
 								store.favorites.map((item, index) => {
 									return (
 										<div key={index} className="dropdown-item d-flex justify-content-between">
-											<Link to={item.type + "/" + item.uid} className="pr-1">
+											<Link to={item.type + "/" + item.id} className="pr-1">
 												{item.name}
 											</Link>
 											<button
 												className="btn btn-danger"
 												onClick={() => {
-													actions.removeFav(item.name);
+													actions.removeFav(item.id, item.type);
 												}}>
 												<i className="far fa-trash-alt"></i>
 											</button>

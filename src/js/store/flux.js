@@ -10,9 +10,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
-			},
 			loadSomeData: () => {
 				/**
 					fetch().then().then(data => setStore({ "foo": data.bar }))
@@ -31,30 +28,43 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log(data);
 					})
 					.catch(err => console.error(err, "LOAD"));
-			},
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
-
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
-
-				//reset the global store
-				setStore({ demo: demo });
+				getActions().getFavorites();
 			},
 			addFav: (name, uid, type) => {
-				const store = getStore();
-				if (store.favorites.every(i => i.name != name)) {
-					setStore({ favorites: [...store.favorites, { name, uid, type }] });
-				}
+				var myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+				myHeaders.append("Authorization", sessionStorage.getItem("token"));
+
+				var requestOptions = {
+					method: "POST",
+					headers: myHeaders,
+					redirect: "follow"
+				};
+
+				fetch(`${process.env.URL_API}favorite/${type}/${uid}`, requestOptions)
+					.then(response => response.json())
+					.then(result => console.log(result))
+					.catch(error => console.log("error", error));
+
+				getActions().getFavorites();
 			},
-			removeFav: i => {
-				const store = getStore();
-				setStore({ favorites: store.favorites.filter(item => item.name != i) });
+			removeFav: (id, type) => {
+				var myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+				myHeaders.append("Authorization", sessionStorage.getItem("token"));
+
+				var requestOptions = {
+					method: "DELETE",
+					headers: myHeaders,
+					redirect: "follow"
+				};
+
+				fetch(`${process.env.URL_API}/favorite/${type}/${id}`, requestOptions)
+					.then(response => response.text())
+					.then(result => console.log(result))
+					.catch(error => console.log("error", error));
+
+				getActions().getFavorites();
 			},
 			characterDetails: uid => {
 				fetch(process.env.URL_API + "character/" + uid)
@@ -115,6 +125,31 @@ const getState = ({ getStore, getActions, setStore }) => {
 				fetch(process.env.URL_API + "user", requestOptions)
 					.then(response => response.json())
 					.then(result => console.log(result))
+					.catch(error => console.log("error", error));
+			},
+			getFavorites: () => {
+				var myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+				myHeaders.append("Authorization", sessionStorage.getItem("token"));
+
+				var requestOptions = {
+					method: "GET",
+					headers: myHeaders,
+					redirect: "follow"
+				};
+
+				fetch(process.env.URL_API + "user/favorites", requestOptions)
+					.then(response => response.json())
+					.then(result => {
+						console.log(result);
+						setStore({
+							favorites: result.map(i => {
+								return i.planet === null
+									? { ...i.character, type: "character" }
+									: { ...i.planet, type: "planet" };
+							})
+						});
+					})
 					.catch(error => console.log("error", error));
 			}
 		}

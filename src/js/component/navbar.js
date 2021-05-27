@@ -12,7 +12,12 @@ export const Navbar = () => {
 					<img src={starsWar} alt="star-wars" className="navbar-brand mb-0 h1" style={{ height: "2em" }} />
 				</Link>
 				<div className="collapse navbar-collapse"></div>
-
+				<Link to="/login">
+					<button className="nav-link btn btn-outline-primary my-2">Login</button>
+				</Link>
+				<Link to="/signup">
+					<button className="nav-link btn btn-outline-primary my-2">Signup</button>
+				</Link>
 				<ul className="navbar-nav mr-auto">
 					<li className="nav-item dropdown">
 						<a

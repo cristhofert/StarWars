@@ -5,7 +5,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			planets: [],
 			favorites: [],
 			character: {},
-			planet: {}
+			planet: {},
+			user: {}
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
@@ -66,14 +67,56 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then(res => res.json())
 					.then(data => setStore({ planet: data }))
 					.catch(err => console.error(err));
-			} /*,
-            signup: () => {
-                fetch(process.env.URL_API + "user/", 
-                {method: "POST",})
-                    .then(res => res.json())
-                    .then(data => setStore({ planet: data.result.properties }))
-                    .catch(err => console.error(err));
-            }*/
+			},
+			login: (email, password) => {
+				var myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+
+				var raw = JSON.stringify({
+					email: email,
+					password: password
+				});
+
+				var requestOptions = {
+					method: "POST",
+					headers: myHeaders,
+					body: raw,
+					redirect: "follow"
+				};
+
+				fetch(process.env.URL_API + "login", requestOptions)
+					.then(response => response.json())
+					.then(result => {
+						console.log(result);
+						setStore({ user: result.user });
+						sessionStorage.setItem("token", result.token);
+					})
+					.catch(error => console.log("error", error));
+			},
+			signup: (email, password, user_name, first_name, last_name) => {
+				var myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+
+				var raw = JSON.stringify({
+					email,
+					password,
+					user_name,
+					first_name,
+					last_name
+				});
+
+				var requestOptions = {
+					method: "POST",
+					headers: myHeaders,
+					body: raw,
+					redirect: "follow"
+				};
+
+				fetch(process.env.URL_API + "user", requestOptions)
+					.then(response => response.json())
+					.then(result => console.log(result))
+					.catch(error => console.log("error", error));
+			}
 		}
 	};
 };

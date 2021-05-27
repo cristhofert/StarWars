@@ -16,14 +16,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 				/**
 					fetch().then().then(data => setStore({ "foo": data.bar }))
                 */
-				fetch("https://www.swapi.tech/api/planets")
+				fetch(process.env.URL_API + "planet/")
 					.then(res => res.json())
-					.then(data => setStore({ planets: data.results }))
-					.catch(err => console.error(err));
-				fetch("https://www.swapi.tech/api/people")
+					.then(data => {
+						setStore({ planets: data });
+						console.log(data);
+					})
+					.catch(err => console.error(err, "LOAD DATA"));
+				fetch(process.env.URL_API + "character/")
 					.then(res => res.json())
-					.then(data => setStore({ characters: data.results }))
-					.catch(err => console.error(err));
+					.then(data => {
+						setStore({ characters: data });
+						console.log(data);
+					})
+					.catch(err => console.error(err, "LOAD"));
 			},
 			changeColor: (index, color) => {
 				//get the store
@@ -50,17 +56,24 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({ favorites: store.favorites.filter(item => item.name != i) });
 			},
 			characterDetails: uid => {
-				fetch("https://www.swapi.tech/api/people/" + uid)
+				fetch(process.env.URL_API + "character/" + uid)
 					.then(res => res.json())
-					.then(data => setStore({ character: data.result.properties }))
+					.then(data => setStore({ character: data }))
 					.catch(err => console.error(err));
 			},
 			planetDetails: uid => {
-				fetch("https://www.swapi.tech/api/planets/" + uid)
+				fetch(process.env.URL_API + "planet/" + uid)
 					.then(res => res.json())
-					.then(data => setStore({ planet: data.result.properties }))
+					.then(data => setStore({ planet: data }))
 					.catch(err => console.error(err));
-			}
+			} /*,
+            signup: () => {
+                fetch(process.env.URL_API + "user/", 
+                {method: "POST",})
+                    .then(res => res.json())
+                    .then(data => setStore({ planet: data.result.properties }))
+                    .catch(err => console.error(err));
+            }*/
 		}
 	};
 };

@@ -14,7 +14,7 @@ export const Home = () => {
 				{store.characters.map((item, index) => {
 					return (
 						<div key={index}>
-							<Character name={item.name} uid={item.uid} />
+							<Character name={item.name} uid={item.id} />
 						</div>
 					);
 				})}
@@ -25,7 +25,7 @@ export const Home = () => {
 				{store.planets.map((item, index) => {
 					return (
 						<div key={index}>
-							<Planet name={item.name} uid={item.uid} />
+							<Planet name={item.name} uid={item.id} />
 						</div>
 					);
 				})}
